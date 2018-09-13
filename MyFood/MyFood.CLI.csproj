@@ -42,7 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MenuOptions\Menu.cs" />
+    <Compile Include="MenuOptions\Option.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProgramLoop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

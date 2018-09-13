@@ -6,7 +6,9 @@ namespace MyFood
     {
         private static void Main()
         {
-            Console.WriteLine("HelloWorld!");
+            Console.WriteLine("Welcome in MyFood!");
+            new ProgramLoop().Run();
+
         }
     }
 }
