@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoMapper;
+using MyFood.BL.Services;
+using System;
 
 namespace MyFood
 {
@@ -8,7 +10,6 @@ namespace MyFood
         {
             Console.WriteLine("Welcome in MyFood!");
             new ProgramLoop().Run();
-
         }
     }
 }
