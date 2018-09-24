@@ -24,7 +24,8 @@ namespace MyFood
             _menu.AddOption(new Option("1", "Add receipe", AddReceipe));
             _menu.AddOption(new Option("2", "Show all recipes", ShowAllReceipes));
             _menu.AddOption(new Option("3", "Show recipes from one category", ShowRecipesInCategory));
-            _menu.AddOption(new Option("4", "Exit", Exit));
+            _menu.AddOption(new Option("4", "Search recipes by ingredients", SearchRecipes));
+            _menu.AddOption(new Option("5", "Exit", Exit));
         }
 
         internal void Run()
@@ -36,6 +37,13 @@ namespace MyFood
                 var command = Console.ReadLine();
                 _menu.InvokeCommand(command);
             }
+        }
+
+        private void SearchRecipes()
+        {
+            var listOfIngredients = SetIngredients();
+            var recipes = _recipesService.SearchRecipes(listOfIngredients);
+            PresentRecipes(recipes);
         }
 
         private void PresentRecipes(List<RecipeDto> recipes)
@@ -89,19 +97,24 @@ namespace MyFood
             return category;
         }
 
-        private void AddReceipe()
+        private List<string> SetIngredients()
         {
-            var category = ChooseCategory();
-            var nameOFDish = _getDataFromUser.GetData("Give name: ");
             var numberOfIngredients = _getDataFromUser.GetNumber("How many ingredients? ");
             var listOfIngredients = new List<string>();
 
-            for(var i = 1; i <= numberOfIngredients; i++)
+            for (var i = 1; i <= numberOfIngredients; i++)
             {
                 var ingredient = _getDataFromUser.GetData($"{i}: ");
                 listOfIngredients.Add(ingredient);
             }
+            return listOfIngredients;
+        }
 
+        private void AddReceipe()
+        {
+            var category = ChooseCategory();
+            var nameOFDish = _getDataFromUser.GetData("Give name: ");
+            var listOfIngredients = SetIngredients();
             var directions = _getDataFromUser.GetData("Give directions: ");
 
             var newRecipe = new RecipeDto
@@ -112,6 +125,7 @@ namespace MyFood
                 ListOfIngredients = listOfIngredients,
                 Directions = directions
             };
+
             _recipesService.AddRecipe(newRecipe);
         }
 
