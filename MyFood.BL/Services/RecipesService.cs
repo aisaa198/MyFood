@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyFood.BL.Models;
+using MyFood.Common.Enums;
 using MyFood.DAL.Models;
 using MyFood.DAL.Repositories;
 using System;
@@ -27,9 +28,9 @@ namespace MyFood.BL.Services
             return _recipesRepository.AddRecipe(recipe);
         }
 
-        public List<RecipeDto> ShowAllRecipes()
+        public List<RecipeDto> GetRecipes(Category category)
         {
-            return _recipesRepository.ShowAllRecipes().Select(recipe => Mapper.Map<RecipeDto>(recipe)).ToList();
+            return _recipesRepository.GetRecipes(category).Select(recipe => Mapper.Map<RecipeDto>(recipe)).ToList();
         }
     }
 }

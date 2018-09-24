@@ -1,4 +1,5 @@
-﻿using MyFood.DAL.Data;
+﻿using MyFood.Common.Enums;
+using MyFood.DAL.Data;
 using MyFood.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,18 @@ namespace MyFood.DAL.Repositories
             }
         }
 
-        public List<Recipe> ShowAllRecipes()
+        public List<Recipe> GetRecipes(Category category)
         {
             using (var dbContext = new MyFoodDbContext())
             {
-                return dbContext.Recipes.ToList();
+                if (category == 0)
+                {
+                    return dbContext.Recipes.ToList();
+                }
+                else
+                {
+                    return dbContext.Recipes.Where(x => x.Category == category).ToList();
+                }
             }
         }
     }

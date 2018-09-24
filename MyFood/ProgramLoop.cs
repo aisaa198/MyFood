@@ -4,7 +4,6 @@ using System.Linq;
 using MyFood.BL.Models;
 using MyFood.BL.Services;
 using MyFood.Common.Enums;
-using MyFood.DAL.Models;
 using MyFood.IoHelpers;
 using MyFood.MenuOptions;
 
@@ -24,17 +23,33 @@ namespace MyFood
             _getDataFromUser = new GetDataFromUser();
             _menu.AddOption(new Option("1", "Add receipe", AddReceipe));
             _menu.AddOption(new Option("2", "Show all recipes", ShowAllReceipes));
-            _menu.AddOption(new Option("3", "Exit", Exit));
+            _menu.AddOption(new Option("3", "Show recipes from one category", ShowRecipesInCategory));
+            _menu.AddOption(new Option("4", "Exit", Exit));
         }
 
-        private void ShowAllReceipes()
+        internal void Run()
         {
-            var recipes = _recipesService.ShowAllRecipes();
+            while (!exit)
+            {
+                _menu.PrintOptions();
+                Console.Write("Type commad: ");
+                var command = Console.ReadLine();
+                _menu.InvokeCommand(command);
+            }
+        }
 
-            foreach(var recipe in recipes)
+        private void PresentRecipes(List<RecipeDto> recipes)
+        {
+            if (recipes.Count == 0)
+            {
+                Console.WriteLine("Nothing to show!");
+                return;
+            }
+
+            foreach (var recipe in recipes)
             {
                 Console.Write($"{recipe.Name} ({recipe.Category}) - ");
-                foreach(var ingredient in recipe.ListOfIngredients)
+                foreach (var ingredient in recipe.ListOfIngredients)
                 {
                     if (ingredient.Equals(recipe.ListOfIngredients.Last()))
                     {
@@ -44,22 +59,39 @@ namespace MyFood
                     {
                         Console.Write($"{ingredient},");
                     }
-                    
                 }
                 Console.WriteLine();
             }
         }
 
-        private void AddReceipe()
+        private void ShowAllReceipes()
+        {
+            var recipes = _recipesService.GetRecipes(0);
+            PresentRecipes(recipes);
+        }
+
+        private void ShowRecipesInCategory()
+        {
+            var category = ChooseCategory();
+            var recipes = _recipesService.GetRecipes(category);
+            PresentRecipes(recipes);
+        }
+
+        private Category ChooseCategory()
         {
             Console.WriteLine("Choose the category: ");
-            foreach(var option in Enum.GetValues(typeof(Category)))
+            foreach (var option in Enum.GetValues(typeof(Category)))
             {
                 Console.WriteLine($"{(int)option} - {option}");
             }
             int.TryParse(Console.ReadLine(), out int numberOfEnumCategory);
             Enum.TryParse<Category>(Enum.GetName(typeof(Category), numberOfEnumCategory), out Category category);
+            return category;
+        }
 
+        private void AddReceipe()
+        {
+            var category = ChooseCategory();
             var nameOFDish = _getDataFromUser.GetData("Give name: ");
             var numberOfIngredients = _getDataFromUser.GetNumber("How many ingredients? ");
             var listOfIngredients = new List<string>();
@@ -86,17 +118,6 @@ namespace MyFood
         private void Exit()
         {
             exit = true;
-        }
-
-        internal void Run()
-        {
-            while (!exit)
-            {
-                _menu.PrintOptions();
-                Console.Write("Type commad: ");
-                var command = Console.ReadLine();
-                _menu.InvokeCommand(command);
-            }
-        }
+        }   
     }
 }
