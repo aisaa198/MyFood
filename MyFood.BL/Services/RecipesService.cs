@@ -36,7 +36,8 @@ namespace MyFood.BL.Services
         public List<RecipeDto> SearchRecipes(List<string> listOfIngredients)
         {
             var allRecipes = GetRecipes(0);
-            List<RecipeDto> foundRecipes = new List<RecipeDto>();
+            Dictionary<RecipeDto, int> foundRecipes = new Dictionary<RecipeDto, int>();
+            var counter = 0;
 
             foreach (var recipe in allRecipes)
             {
@@ -44,14 +45,21 @@ namespace MyFood.BL.Services
                 {
                     foreach (var element in listOfIngredients)
                     {
-                        if (ingredient == element && !foundRecipes.Contains(recipe))
+                        if (ingredient == element)
                         {
-                            foundRecipes.Add(recipe);
+                            counter++;
                         }
                     }
                 }
+                if(counter > 0)
+                {
+                    foundRecipes.Add(recipe, counter);
+                    counter = 0;
+                }
             }
-            return foundRecipes;
+            var orderedRecipes = foundRecipes.OrderByDescending(x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value); ;
+            var listOfRecipes = orderedRecipes.Keys.ToList();
+            return listOfRecipes;
         }
     }
 }
