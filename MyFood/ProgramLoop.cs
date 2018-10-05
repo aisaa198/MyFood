@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyFood.BL.Models;
 using MyFood.BL.Services;
+using MyFood.BL.Services.Interfaces;
 using MyFood.Common.Enums;
 using MyFood.IoHelpers;
 using MyFood.MenuOptions;
@@ -11,16 +12,18 @@ namespace MyFood
 {
     class ProgramLoop
     {
-        private readonly Menu _menu;
-        private readonly RecipesService _recipesService;
-        private readonly GetDataFromUser _getDataFromUser;
-        private bool exit = false;
+        private readonly IMenu _menu;
+        private readonly IRecipesService _recipesService;
+        private readonly IRatesService _ratesService;
+        private readonly IGetDataFromUser _getDataFromUser;
+        private bool _exit = false;
 
-        public ProgramLoop()
+        public ProgramLoop(IMenu menu, IRecipesService recipesService, IRatesService ratesService, IGetDataFromUser getDataFromUser)
         {
-            _menu = new Menu();
-            _recipesService = new RecipesService();
-            _getDataFromUser = new GetDataFromUser();
+            _menu = menu;
+            _recipesService = recipesService;
+            _ratesService = ratesService;
+            _getDataFromUser = getDataFromUser;
             _menu.AddOption(new Option("1", "Add receipe", AddReceipe));
             _menu.AddOption(new Option("2", "Show all recipes", ShowAllReceipes));
             _menu.AddOption(new Option("3", "Show recipes from one category", ShowRecipesInCategory));
@@ -30,13 +33,30 @@ namespace MyFood
 
         internal void Run()
         {
-            while (!exit)
+            while (!_exit)
             {
                 _menu.PrintOptions();
                 Console.Write("Type commad: ");
                 var command = Console.ReadLine();
                 _menu.InvokeCommand(command);
             }
+        }
+
+        private void ShowRecipe(RecipeDto recipe)
+        {
+            Console.WriteLine(recipe.Name.ToUpper());
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine("Ingredients:");
+            foreach (var ingredient in recipe.ListOfIngredients)
+            {
+                Console.WriteLine($"* {ingredient}");
+            }
+            Console.WriteLine("Directions:");
+            Console.WriteLine(recipe.Directions);
+            Console.WriteLine("----------------------------------");
+
+            var rate = _ratesService.GetRate(recipe.Id);
+            Console.WriteLine($"Rate: {rate}");
         }
 
         private void SearchRecipes()
@@ -56,7 +76,7 @@ namespace MyFood
 
             foreach (var recipe in recipes)
             {
-                Console.Write($"{recipe.Name} ({recipe.Category}) - ");
+                Console.Write($"{recipes.IndexOf(recipe)+1}. {recipe.Name} ({recipe.Category}) - ");
                 foreach (var ingredient in recipe.ListOfIngredients)
                 {
                     if (ingredient.Equals(recipe.ListOfIngredients.Last()))
@@ -70,6 +90,10 @@ namespace MyFood
                 }
                 Console.WriteLine();
             }
+
+            var choice = _getDataFromUser.GetNumber("Choose recipe: ");
+ 
+            ShowRecipe(recipes[choice - 1]);
         }
 
         private void ShowAllReceipes()
@@ -113,14 +137,14 @@ namespace MyFood
         private void AddReceipe()
         {
             var category = ChooseCategory();
-            var nameOFDish = _getDataFromUser.GetData("Give name: ");
+            var nameOfDish = _getDataFromUser.GetData("Give name: ");
             var listOfIngredients = SetIngredients();
             var directions = _getDataFromUser.GetData("Give directions: ");
 
             var newRecipe = new RecipeDto
             {
                 Id = Guid.NewGuid(),
-                Name = nameOFDish,
+                Name = nameOfDish,
                 Category = category,
                 ListOfIngredients = listOfIngredients,
                 Directions = directions
@@ -131,7 +155,7 @@ namespace MyFood
 
         private void Exit()
         {
-            exit = true;
+            _exit = true;
         }   
     }
 }

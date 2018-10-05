@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace MyFood.DAL.Repositories
 {
-    public class RecipesRepository
+    public class RecipesRepository : IRecipesRepository
     {
         public Guid AddRecipe(Recipe recipe)
         {
@@ -33,5 +33,7 @@ namespace MyFood.DAL.Repositories
                 }
             }
         }
+
+        
     }
 }

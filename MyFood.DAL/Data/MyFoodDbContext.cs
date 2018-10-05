@@ -10,6 +10,7 @@ namespace MyFood.DAL.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Rate> Rates { get; set; }
         private static string GetConnectionString() => ConfigurationManager.ConnectionStrings["MyFoodDb"].ConnectionString;
             
     }

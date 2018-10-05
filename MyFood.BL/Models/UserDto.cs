@@ -1,8 +1,7 @@
-﻿using MyFood.BL.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace MyFood.DAL.Models
+namespace MyFood.BL.Models
 {
     public class UserDto
     {

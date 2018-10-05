@@ -1,15 +1,18 @@
-﻿using AutoMapper;
-using MyFood.BL.Services;
-using System;
+﻿using System;
+using MyFood.Modules;
+using Ninject;
 
 namespace MyFood
 {
-    class Program
+    internal class Program
     {
         private static void Main()
         {
             Console.WriteLine("Welcome in MyFood!");
-            new ProgramLoop().Run();
+            var kernel = new StandardKernel();
+            kernel.Load(new [] {new CliModule()});
+            var programLoop = kernel.Get<ProgramLoop>();
+            programLoop.Run();
         }
     }
 }

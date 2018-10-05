@@ -33,6 +33,9 @@
     <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -47,9 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\RateDto.cs" />
     <Compile Include="Models\RecipeDto.cs" />
     <Compile Include="Models\UserDto.cs" />
+    <Compile Include="Modules\BlModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Interfaces\IRatesService.cs" />
+    <Compile Include="Services\Interfaces\IRecipesService.cs" />
+    <Compile Include="Services\RatesService.cs" />
     <Compile Include="Services\RecipesService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,21 +6,26 @@ using MyFood.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyFood.BL.Services.Interfaces;
 
 namespace MyFood.BL.Services
 {
-    public class RecipesService
+    public class RecipesService : IRecipesService
     {
-        private readonly RecipesRepository _recipesRepository;
+        private readonly IRecipesRepository _recipesRepository;
 
-        public RecipesService()
+        public RecipesService(IRecipesRepository recipesRepository)
         {
             Mapper.Initialize(cfg => {
                 cfg.CreateMap<RecipeDto, Recipe>().ForMember(x => x.Ingredients, opt => opt.MapFrom(src => string.Join(",", src.ListOfIngredients)));
                 cfg.CreateMap<Recipe, RecipeDto>().ForMember(dest => dest.ListOfIngredients, m => m.MapFrom(src => src.Ingredients.Split(',').ToList()));
+                cfg.CreateMap<Rate, RateDto>();
+                cfg.CreateMap<RateDto, Rate>();
             });
-            _recipesRepository = new RecipesRepository();
+            _recipesRepository = recipesRepository;
         }
+
+        
 
         public Guid AddRecipe(RecipeDto recipeDto)
         {

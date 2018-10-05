@@ -2,12 +2,12 @@
 
 namespace MyFood.IoHelpers
 {
-    internal class GetDataFromUser
+    internal class GetDataFromUser : IGetDataFromUser
     {
         public string GetData(string messageToUser)
         {
             Console.Write(messageToUser);
-            string input = Console.ReadLine();
+            var input = Console.ReadLine();
             while (string.IsNullOrWhiteSpace(input))
             {
                 input = GetData("Give the data: ");
