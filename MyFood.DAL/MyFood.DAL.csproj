@@ -59,6 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IRatesRepository.cs" />
     <Compile Include="Repositories\Interfaces\IRecipesRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IUsersRepository.cs" />
     <Compile Include="Repositories\RatesRepository.cs" />
     <Compile Include="Repositories\RecipesRepository.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />

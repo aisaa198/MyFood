@@ -9,6 +9,6 @@ namespace MyFood.BL.Services.Interfaces
     {
         Guid AddRecipe(RecipeDto recipeDto);
         List<RecipeDto> GetRecipes(Category category);
-        List<RecipeDto> SearchRecipes(List<string> listOfIngredients);
+        List<RecipeDto> SearchRecipes(string[] listOfIngredients);
     }
 }

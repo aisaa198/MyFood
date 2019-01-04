@@ -1,4 +1,4 @@
-﻿using System;
+﻿using AutoMapper;
 using MyFood.BL.Services;
 using MyFood.BL.Services.Interfaces;
 using MyFood.DAL.Modules;
@@ -14,6 +14,7 @@ namespace MyFood.BL.Modules
             kernel?.Load(new [] {new DalModule()});
             Bind<IRatesService>().To<RatesService>();
             Bind<IRecipesService>().To<RecipesService>();
+            Bind<IMapper>().ToProvider<MapperProvider>();
         }
     }
 }

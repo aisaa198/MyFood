@@ -10,7 +10,7 @@ using MyFood.MenuOptions;
 
 namespace MyFood
 {
-    class ProgramLoop
+    internal class ProgramLoop
     {
         private readonly IMenu _menu;
         private readonly IRecipesService _recipesService;
@@ -66,7 +66,7 @@ namespace MyFood
             PresentRecipes(recipes);
         }
 
-        private void PresentRecipes(List<RecipeDto> recipes)
+        private void PresentRecipes(IList<RecipeDto> recipes)
         {
             if (recipes.Count == 0)
             {
@@ -91,9 +91,19 @@ namespace MyFood
                 Console.WriteLine();
             }
 
-            var choice = _getDataFromUser.GetNumber("Choose recipe: ");
- 
-            ShowRecipe(recipes[choice - 1]);
+            int choice;
+            do
+            {
+                choice = _getDataFromUser.GetNumber("Choose recipe: ");
+                if (choice <= recipes.Count)
+                {
+                    ShowRecipe(recipes[choice - 1]);
+                }
+                else
+                {
+                    Console.WriteLine("Wrong number!");
+                }
+            } while (choice > recipes.Count);
         }
 
         private void ShowAllReceipes()
@@ -121,15 +131,15 @@ namespace MyFood
             return category;
         }
 
-        private List<string> SetIngredients()
+        private string[] SetIngredients()
         {
             var numberOfIngredients = _getDataFromUser.GetNumber("How many ingredients? ");
-            var listOfIngredients = new List<string>();
+            var listOfIngredients = new string[numberOfIngredients];
 
             for (var i = 1; i <= numberOfIngredients; i++)
             {
                 var ingredient = _getDataFromUser.GetData($"{i}: ");
-                listOfIngredients.Add(ingredient);
+                listOfIngredients[i - 1] = ingredient;
             }
             return listOfIngredients;
         }

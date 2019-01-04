@@ -13,37 +13,32 @@ namespace MyFood.BL.Services
     public class RecipesService : IRecipesService
     {
         private readonly IRecipesRepository _recipesRepository;
+        private readonly IMapper _mapper;
 
-        public RecipesService(IRecipesRepository recipesRepository)
+        public RecipesService(IRecipesRepository recipesRepository, IMapper mapper)
         {
-            Mapper.Initialize(cfg => {
-                cfg.CreateMap<RecipeDto, Recipe>().ForMember(x => x.Ingredients, opt => opt.MapFrom(src => string.Join(",", src.ListOfIngredients)));
-                cfg.CreateMap<Recipe, RecipeDto>().ForMember(dest => dest.ListOfIngredients, m => m.MapFrom(src => src.Ingredients.Split(',').ToList()));
-                cfg.CreateMap<Rate, RateDto>();
-                cfg.CreateMap<RateDto, Rate>();
-            });
             _recipesRepository = recipesRepository;
+            _mapper = mapper;
         }
-
         
-
         public Guid AddRecipe(RecipeDto recipeDto)
         {
-            var recipe = Mapper.Map<Recipe>(recipeDto);
+            var recipe = _mapper.Map<Recipe>(recipeDto);
             return _recipesRepository.AddRecipe(recipe);
         }
 
-        public List<RecipeDto> GetRecipes(Category category)
+        public virtual List<RecipeDto> GetRecipes(Category category)
         {
-            return _recipesRepository.GetRecipes(category).Select(recipe => Mapper.Map<RecipeDto>(recipe)).ToList();
+            return _recipesRepository.GetRecipes(category).Select(recipe => _mapper.Map<RecipeDto>(recipe)).ToList();
         }
 
-        public List<RecipeDto> SearchRecipes(List<string> listOfIngredients)
+        public List<RecipeDto> SearchRecipes(string[] listOfIngredients)
         {
             var allRecipes = GetRecipes(0);
-            Dictionary<RecipeDto, int> foundRecipes = new Dictionary<RecipeDto, int>();
+            var foundRecipes = new Dictionary<RecipeDto, int>();
             var counter = 0;
 
+            if (listOfIngredients == null || listOfIngredients.Length == 0) return allRecipes;
             foreach (var recipe in allRecipes)
             {
                 foreach (var ingredient in recipe.ListOfIngredients)

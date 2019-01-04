@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFood.WebApi", "MyFood.Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFood.Common", "MyFood.Common\MyFood.Common.csproj", "{8CC006C3-0978-4058-8BC3-B12A6FB907CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFood.Tests", "MyFood.Tests\MyFood.Tests.csproj", "{117DAE26-796D-4177-AC56-1B35D241CB12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8CC006C3-0978-4058-8BC3-B12A6FB907CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CC006C3-0978-4058-8BC3-B12A6FB907CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CC006C3-0978-4058-8BC3-B12A6FB907CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{117DAE26-796D-4177-AC56-1B35D241CB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{117DAE26-796D-4177-AC56-1B35D241CB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{117DAE26-796D-4177-AC56-1B35D241CB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{117DAE26-796D-4177-AC56-1B35D241CB12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
