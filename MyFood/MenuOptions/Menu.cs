@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MyFood.MenuOptions
 {
-    internal class Menu : IMenu
+    public class Menu : IMenu
     {
         private readonly List<Option> _options = new List<Option>();
 

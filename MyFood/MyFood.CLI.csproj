@@ -68,6 +68,8 @@
     <Compile Include="Modules\CliModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramLoop.cs" />
+    <Compile Include="Services\IUserManagementsService.cs" />
+    <Compile Include="Services\UserManagementsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

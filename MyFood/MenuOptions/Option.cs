@@ -2,7 +2,7 @@
 
 namespace MyFood.MenuOptions
 {
-    internal class Option
+    public class Option
     {
         public string Number { get; }
         public string Command { get; }

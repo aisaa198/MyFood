@@ -9,6 +9,7 @@ namespace MyFood.DAL.Modules
         {
             Bind<IRatesRepository>().To<RatesRepository>();
             Bind<IRecipesRepository>().To<RecipesRepository>();
+            Bind<IUsersRepository>().To<UsersRepository>();
         }
     }
 }

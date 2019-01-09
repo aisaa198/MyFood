@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using MyFood.BL.Models;
+using MyFood.DAL.Models;
 using MyFood.DAL.Repositories;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MyFood.BL.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IMapper _mapper;
         private readonly IUsersRepository _usersRepository;
@@ -26,6 +29,17 @@ namespace MyFood.BL.Services
         {
             var user = _usersRepository.GetUserByLogin(userLogin);
             return _mapper.Map<UserDto>(user);
+        }
+
+        public List<UserDto> GetAllUsers()
+        {
+            return _usersRepository.GetAllUsers().Select(x => _mapper.Map<UserDto>(x)).ToList();
+        }
+
+        public UserDto RegisterUser(UserDto newUser)
+        {
+            var registeredUser = _usersRepository.RegisterUser(_mapper.Map<User>(newUser));
+            return (registeredUser == null)? null : _mapper.Map<UserDto>(registeredUser);
         }
     }
 }

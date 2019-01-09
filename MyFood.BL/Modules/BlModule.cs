@@ -15,6 +15,7 @@ namespace MyFood.BL.Modules
             Bind<IRatesService>().To<RatesService>();
             Bind<IRecipesService>().To<RecipesService>();
             Bind<IMapper>().ToProvider<MapperProvider>();
+            Bind<IUserService>().To<UserService>();
         }
     }
 }
