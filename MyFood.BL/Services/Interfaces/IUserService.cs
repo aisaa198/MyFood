@@ -10,5 +10,6 @@ namespace MyFood.BL.Services
         UserDto GetUserById(Guid userId);
         UserDto GetUserByLogin(string userLogin);
         UserDto RegisterUser(UserDto newUser);
+        UserDto LogIn(string login, string password);
     }
 }

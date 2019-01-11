@@ -87,6 +87,10 @@
       <Project>{17187082-C180-45AB-BA50-50FC205ADC66}</Project>
       <Name>MyFood.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MyFood\MyFood.CLI.csproj">
+      <Project>{77716ba6-5614-476b-b1b3-a7c38a76987b}</Project>
+      <Name>MyFood.CLI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

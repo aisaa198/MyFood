@@ -41,5 +41,12 @@ namespace MyFood.BL.Services
             var registeredUser = _usersRepository.RegisterUser(_mapper.Map<User>(newUser));
             return (registeredUser == null)? null : _mapper.Map<UserDto>(registeredUser);
         }
+
+        public UserDto LogIn(string login, string password)
+        {
+            var foundUser = _usersRepository.GetUserByLogin(login);
+
+            return (foundUser == null || foundUser.Password != password) ? null : _mapper.Map<UserDto>(foundUser);
+        }
     }
 }

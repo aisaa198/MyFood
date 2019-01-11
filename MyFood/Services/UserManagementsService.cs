@@ -18,6 +18,7 @@ namespace MyFood
         private readonly IGetDataFromUser _getDataFromUser;
         private readonly IUserService _userService;
         private bool _exit = false;
+        public UserDto _loggedUser = null;
 
         public UserManagementsService(IMenu menu, IRecipesService recipesService, IRatesService ratesService, IGetDataFromUser getDataFromUser, IUserService userService)
         {
@@ -26,16 +27,16 @@ namespace MyFood
             _ratesService = ratesService;
             _getDataFromUser = getDataFromUser;
             _userService = userService;
-            ShowMenuOptions();
+            AddMenuOptions();
         }
 
-        private void ShowMenuOptions()
+        private void AddMenuOptions()
         {
             _menu.AddOption(new Option("1", "Add receipe", AddReceipe));
             _menu.AddOption(new Option("2", "Show all recipes", ShowAllReceipes));
             _menu.AddOption(new Option("3", "Show recipes from one category", ShowRecipesInCategory));
             _menu.AddOption(new Option("4", "Search recipes by ingredients", SearchRecipes));
-            _menu.AddOption(new Option("5", "Exit", Exit));
+            _menu.AddOption(new Option("5", "Log out", LogOut));
         }
 
         internal void Run()
@@ -65,8 +66,7 @@ namespace MyFood
                 Id = Guid.NewGuid(),
                 Login = login,
                 Password = password,
-                Name = name,
-                Favourites = new List<RecipeDto>()
+                Name = name
             };
             var success = _userService.RegisterUser(newUser);
             Console.WriteLine("The operation " + ((success == null) ? "failed" : "was succesful!"));
@@ -74,7 +74,21 @@ namespace MyFood
 
         public void LogIn()
         {
+            var login = _getDataFromUser.GetData("Login: ");
+            var password = _getDataFromUser.GetData("Password: ");
 
+            var success = _userService.LogIn(login, password);
+
+            if (success == null)
+            {
+                Console.WriteLine("Wrong login or password!");
+            }
+            else
+            {
+                _loggedUser = success;
+                Console.WriteLine($"Hello {_loggedUser.Name}! Choose what you want to do:");
+                Run();
+            }
         }
 
         private void ShowRecipe(RecipeDto recipe)
@@ -198,9 +212,10 @@ namespace MyFood
             _recipesService.AddRecipe(newRecipe);
         }
 
-        private void Exit()
+        private void LogOut()
         {
             _exit = true;
+            _loggedUser = null;
         }   
     }
 }
