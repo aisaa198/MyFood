@@ -3,6 +3,7 @@ using MyFood.BL.Models;
 using MyFood.DAL.Models;
 using MyFood.DAL.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MyFood.BL.Services
@@ -18,16 +19,21 @@ namespace MyFood.BL.Services
             _mapper = mapper;
         }
 
-        public Guid AddRate(RateDto rateDto)
+        public RateDto AddRate(RateDto rateDto)
         {
             var rate = _mapper.Map<Rate>(rateDto);
-            rate.Id = Guid.NewGuid();
-            return _ratesRepository.AddRate(rate);
+            var addedRate = _ratesRepository.AddRate(rate);
+            return _mapper.Map<RateDto>(addedRate);
         }
 
-        public double GetRate(Guid userId)
+        public List<RateDto> GetRates(Guid recipeId)
         {
-            var rates = _ratesRepository.GetRate(userId);
+            return _ratesRepository.GetRates(recipeId).Select(x => _mapper.Map<RateDto>(x)).ToList();
+        }
+
+        public double CountRate(Guid recipeId)
+        {
+            var rates = GetRates(recipeId);
             var score = (rates.Count == 0) ? 0 : rates.Average(x => x.Score);
             return Math.Round(score, 1);
         }

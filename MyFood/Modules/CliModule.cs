@@ -12,7 +12,7 @@ namespace MyFood.Modules
             var kernel = Kernel;
             kernel?.Load(new[] {new BlModule()});
             Bind<IGetDataFromUser>().To<GetDataFromUser>();
-            Bind<IUserManagementsService>().To<UserManagementsService>();
+            Bind<IUserManagementsService>().To<UserManagementsService>().InSingletonScope();
             Bind<IMenu>().To<Menu>();
         }
     }

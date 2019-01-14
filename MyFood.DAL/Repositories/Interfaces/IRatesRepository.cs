@@ -6,7 +6,7 @@ namespace MyFood.DAL.Repositories
 {
     public interface IRatesRepository
     {
-        Guid AddRate(Rate rate);
-        List<Rate> GetRate(Guid id);
+        Rate AddRate(Rate rate);
+        List<Rate> GetRates(Guid recipeId);
     }
 }

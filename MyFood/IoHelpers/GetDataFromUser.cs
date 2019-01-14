@@ -15,13 +15,13 @@ namespace MyFood.IoHelpers
             return input;
         }
 
-        public int GetNumber(string messageToUser)
+        public int GetNumber(string messageToUser, int min, int max)
         {
             string input = GetData(messageToUser);
             int result;
-            while (!int.TryParse(input, out result) || result < 0)
+            while (!int.TryParse(input, out result) || result < min || result > max)
             {
-                input = GetData($"Give the correct data (number greater than 0): ");
+                input = GetData($"Give the correct data (number from {min} to {max}): ");
             }
             return result;
         }

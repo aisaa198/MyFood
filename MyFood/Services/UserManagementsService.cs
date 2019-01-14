@@ -32,7 +32,7 @@ namespace MyFood
 
         private void AddMenuOptions()
         {
-            _menu.AddOption(new Option("1", "Add receipe", AddReceipe));
+            _menu.AddOption(new Option("1", "Add recipe", AddRecipe));
             _menu.AddOption(new Option("2", "Show all recipes", ShowAllReceipes));
             _menu.AddOption(new Option("3", "Show recipes from one category", ShowRecipesInCategory));
             _menu.AddOption(new Option("4", "Search recipes by ingredients", SearchRecipes));
@@ -86,6 +86,7 @@ namespace MyFood
             else
             {
                 _loggedUser = success;
+                _exit = false;
                 Console.WriteLine($"Hello {_loggedUser.Name}! Choose what you want to do:");
                 Run();
             }
@@ -104,8 +105,40 @@ namespace MyFood
             Console.WriteLine(recipe.Directions);
             Console.WriteLine("----------------------------------");
 
-            var rate = _ratesService.GetRate(recipe.Id);
+            var rate = _ratesService.CountRate(recipe.Id);
             Console.WriteLine($"Rate: {rate}");
+            AddRate(recipe);
+        }
+
+        private void AddRate(RecipeDto recipe)
+        {
+            var rates = _ratesService.GetRates(recipe.Id);
+
+            if( _loggedUser != null)
+            {
+                var loggedUserRate = rates.SingleOrDefault(x => x.User.Id == _loggedUser.Id);
+                if (loggedUserRate != null)
+                {
+                    Console.WriteLine($"Your rate: {loggedUserRate.Score}");
+                }
+                else
+                {
+                    var choice = _getDataFromUser.GetData("Do you want to rate this recipe? Y/N");
+
+                    if (choice.ToUpper() == "Y")
+                    {
+                        var score = _getDataFromUser.GetNumber("Your rate (0-10): ", 0, 10);
+                        var rate = new RateDto
+                        {
+                            Id = Guid.NewGuid(),
+                            Score = score,
+                            User = _loggedUser,
+                            Recipe = recipe
+                        };
+                        _ratesService.AddRate(rate);
+                    };
+                }
+            }  
         }
 
         private void SearchRecipes()
@@ -140,19 +173,8 @@ namespace MyFood
                 Console.WriteLine();
             }
 
-            int choice;
-            do
-            {
-                choice = _getDataFromUser.GetNumber("Choose recipe: ");
-                if (choice <= recipes.Count)
-                {
-                    ShowRecipe(recipes[choice - 1]);
-                }
-                else
-                {
-                    Console.WriteLine("Wrong number!");
-                }
-            } while (choice > recipes.Count);
+            int choice = _getDataFromUser.GetNumber("Choose recipe: ", 1, recipes.Count);
+            ShowRecipe(recipes[choice - 1]);
         }
 
         private void ShowAllReceipes()
@@ -182,7 +204,7 @@ namespace MyFood
 
         private string[] SetIngredients()
         {
-            var numberOfIngredients = _getDataFromUser.GetNumber("How many ingredients? ");
+            var numberOfIngredients = _getDataFromUser.GetNumber("How many ingredients? ", 1, 10);
             var listOfIngredients = new string[numberOfIngredients];
 
             for (var i = 1; i <= numberOfIngredients; i++)
@@ -193,7 +215,7 @@ namespace MyFood
             return listOfIngredients;
         }
 
-        private void AddReceipe()
+        private void AddRecipe()
         {
             var category = ChooseCategory();
             var nameOfDish = _getDataFromUser.GetData("Give name: ");
