@@ -18,7 +18,7 @@ namespace MyFood.WebApi.Controllers
 
         [HttpPost]
         [Route("api/recipes/add")]
-        public Guid AddRecipe(RecipeDto recipe)
+        public RecipeDto AddRecipe(RecipeDto recipe)
         {
             recipe.Id = Guid.NewGuid();
             return _recipesService.AddRecipe(recipe);

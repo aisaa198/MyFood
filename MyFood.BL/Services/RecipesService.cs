@@ -3,7 +3,6 @@ using MyFood.BL.Models;
 using MyFood.Common.Enums;
 using MyFood.DAL.Models;
 using MyFood.DAL.Repositories;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyFood.BL.Services.Interfaces;
@@ -21,10 +20,19 @@ namespace MyFood.BL.Services
             _mapper = mapper;
         }
         
-        public Guid AddRecipe(RecipeDto recipeDto)
+        public RecipeDto AddRecipe(RecipeDto recipeDto)
         {
             var recipe = _mapper.Map<Recipe>(recipeDto);
-            return _recipesRepository.AddRecipe(recipe);
+            var addedRecipe = _recipesRepository.AddRecipe(recipe);
+            return _mapper.Map<RecipeDto>(addedRecipe);
+        }
+
+        public bool AddToFavorites(UserDto userDto,  RecipeDto recipeDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            var recipe = _mapper.Map<Recipe>(recipeDto);
+
+            return _recipesRepository.AddToFavorites(user, recipe);
         }
 
         public virtual List<RecipeDto> GetRecipes(Category category)

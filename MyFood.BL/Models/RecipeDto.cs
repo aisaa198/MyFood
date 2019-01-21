@@ -11,5 +11,6 @@ namespace MyFood.BL.Models
         public Category Category { get; set; }
         public string[] ListOfIngredients { get; set; }
         public string Directions { get; set; }
+        public List<UserDto> Users { get; set; }
     }
 }

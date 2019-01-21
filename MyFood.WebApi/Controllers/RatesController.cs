@@ -16,7 +16,7 @@ namespace MyFood.WebApi.Controllers
 
         [HttpPost]
         [Route("api/rates/add")]
-        public Guid AddRate([FromBody] RateDto rate)
+        public RateDto AddRate([FromBody] RateDto rate)
         {
             return _ratesService.AddRate(rate);
         }

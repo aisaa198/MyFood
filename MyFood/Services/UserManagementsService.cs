@@ -66,10 +66,11 @@ namespace MyFood
                 Id = Guid.NewGuid(),
                 Login = login,
                 Password = password,
-                Name = name
+                Name = name,
+                Favourites = new List<RecipeDto>()
             };
-            var success = _userService.RegisterUser(newUser);
-            Console.WriteLine("The operation " + ((success == null) ? "failed" : "was succesful!"));
+            var result = _userService.RegisterUser(newUser);
+            ShowResult(result);
         }
 
         public void LogIn()
@@ -108,6 +109,32 @@ namespace MyFood
             var rate = _ratesService.CountRate(recipe.Id);
             Console.WriteLine($"Rate: {rate}");
             AddRate(recipe);
+            AddToFavorites(recipe);
+        }
+
+        private void UpdateLoggedUser()
+        {
+            _loggedUser = _userService.GetUserByLogin(_loggedUser.Login);
+        }
+
+        private void AddToFavorites(RecipeDto recipe)
+        {
+            if (_loggedUser != null && !_loggedUser.Favourites.Any(x => x.Id == recipe.Id))
+            {
+                var choice = _getDataFromUser.GetData("Do you want to add this recipe to favorites? Y/N");
+
+                if (choice.ToUpper() == "Y")
+                {
+                    var success = (_recipesService.AddToFavorites(_loggedUser, recipe))? new object() : null;
+                    ShowResult(success);
+                    UpdateLoggedUser();
+                };
+            }
+        }
+
+        private void ShowResult(object result)
+        {
+            Console.WriteLine("The operation " + ((result == null) ? "failed!" : "was succesful!"));
         }
 
         private void AddRate(RecipeDto recipe)
@@ -135,7 +162,9 @@ namespace MyFood
                             User = _loggedUser,
                             Recipe = recipe
                         };
-                        _ratesService.AddRate(rate);
+                        var result = _ratesService.AddRate(rate);
+                        ShowResult(result);
+                        UpdateLoggedUser();
                     };
                 }
             }  
@@ -218,20 +247,22 @@ namespace MyFood
         private void AddRecipe()
         {
             var category = ChooseCategory();
-            var nameOfDish = _getDataFromUser.GetData("Give name: ");
+            var name = _getDataFromUser.GetData("Give name: ");
             var listOfIngredients = SetIngredients();
             var directions = _getDataFromUser.GetData("Give directions: ");
 
             var newRecipe = new RecipeDto
             {
                 Id = Guid.NewGuid(),
-                Name = nameOfDish,
+                Name = name,
                 Category = category,
                 ListOfIngredients = listOfIngredients,
-                Directions = directions
+                Directions = directions,
+                Users = new List<UserDto>()
             };
 
-            _recipesService.AddRecipe(newRecipe);
+            var result = _recipesService.AddRecipe(newRecipe);
+            ShowResult(result);
         }
 
         private void LogOut()

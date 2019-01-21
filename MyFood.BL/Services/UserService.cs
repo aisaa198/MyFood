@@ -19,12 +19,6 @@ namespace MyFood.BL.Services
             _usersRepository = usersRepository;
         }
 
-        public UserDto GetUserById (Guid userId)
-        {
-            var user = _usersRepository.GetUserById(userId);
-            return _mapper.Map<UserDto>(user);
-        }
-
         public UserDto GetUserByLogin(string userLogin)
         {
             var user = _usersRepository.GetUserByLogin(userLogin);
@@ -47,6 +41,11 @@ namespace MyFood.BL.Services
             var foundUser = _usersRepository.GetUserByLogin(login);
 
             return (foundUser == null || foundUser.Password != password) ? null : _mapper.Map<UserDto>(foundUser);
+        }
+
+        public UserDto UpdateLoggedUser(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

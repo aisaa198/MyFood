@@ -7,7 +7,8 @@ namespace MyFood.DAL.Repositories
 {
     public interface IRecipesRepository
     {
-        Guid AddRecipe(Recipe recipe);
+        Recipe AddRecipe(Recipe recipe);
         List<Recipe> GetRecipes(Category category);
+        bool AddToFavorites(User user, Recipe recipe);
     }
 }

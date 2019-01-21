@@ -1,8 +1,8 @@
 ﻿using MyFood.DAL.Data;
 using MyFood.DAL.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 
 namespace MyFood.DAL.Repositories
 {
@@ -28,16 +28,7 @@ namespace MyFood.DAL.Repositories
         {
             using (var dbContext = new MyFoodDbContext())
             {
-                var user = dbContext.Users.SingleOrDefault(x => x.Login == login);
-                return user;
-            }
-        }
-
-        public User GetUserById(Guid userId)
-        {
-            using (var dbContext = new MyFoodDbContext())
-            {
-                var user = dbContext.Users.SingleOrDefault(x => x.Id == userId);
+                var user = dbContext.Users.Include(x => x.Favourites).SingleOrDefault(x => x.Login == login);
                 return user;
             }
         }

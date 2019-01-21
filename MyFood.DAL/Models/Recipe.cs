@@ -1,5 +1,6 @@
 ﻿using MyFood.Common.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace MyFood.DAL.Models
 {
@@ -10,5 +11,6 @@ namespace MyFood.DAL.Models
         public Category Category { get; set; }
         public string Ingredients { get; set; }
         public string Directions { get; set; }
+        public List<User> Users { get; set; }
     }
 }
