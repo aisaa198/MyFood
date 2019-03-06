@@ -10,5 +10,6 @@ namespace MyFood.BL.Services.Interfaces
         List<RecipeDto> GetRecipes(Category category);
         List<RecipeDto> SearchRecipes(string[] listOfIngredients);
         bool AddToFavorites(UserDto userDto, RecipeDto recipeDto);
+        List<RecipeDto> AddExemplaryRecipes();
     }
 }

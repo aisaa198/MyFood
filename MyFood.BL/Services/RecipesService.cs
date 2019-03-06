@@ -6,6 +6,7 @@ using MyFood.DAL.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using MyFood.BL.Services.Interfaces;
+using System;
 
 namespace MyFood.BL.Services
 {
@@ -19,15 +20,64 @@ namespace MyFood.BL.Services
             _recipesRepository = recipesRepository;
             _mapper = mapper;
         }
-        
+
+        public List<RecipeDto> AddExemplaryRecipes()
+        {
+            var newRecipes = new List<Recipe>
+            {
+                new Recipe
+                {
+                Id = Guid.NewGuid(),
+                Name = "Francuskie paluchy pomidorowe",
+                Category = Category.Snack,
+                Ingredients = "ciasto francuskie,koncentrat pomidorowy,jajka,sezam,oregano",
+                Directions = "Ciasto francuskie rozwiń, posmaruj koncentratem pomidorowym i posyp oregano. Pokrój na paski i umieść je jeden na drugim. Skręcaj spiralnie. Posmaruj rozmąconym jajkiem i posyp sezamem. Piecz w 200 stopniach na złoty kolor."
+                },
+                new Recipe
+                {
+                Id = Guid.NewGuid(),
+                Name = "Babeczka z kubeczka",
+                Category = Category.Dessert,
+                Ingredients = "mleko,jajka,mąka,proszek do pieczenia,olej,cukier,kakao",
+                Directions = "Wszystkie mokre składniki połączyć za pomocą widelca w kubeczku, następnie dodać składniki suche i wymieszać. Piec około 3-4 minuty w mikrofalówce na najwyższej mocy."
+                },
+                new Recipe
+                {
+                Id = Guid.NewGuid(),
+                Name = "Muffiny bananowe",
+                Category = Category.Dessert,
+                Ingredients = "mąka,mleko,banany,jajka,olej,proszek do pieczenia",
+                Directions = "Banany, mleko, jajka i olej zmiksuj na gładką masę. Dodaj mąkę wymieszaną z proszkiem do pieczenia, delikatnie wymieszaj. Foremki wypełnij do 3/4 wysokości. Piecz w 180 stopniach przez około 15 minut."
+                },
+                new Recipe
+                {
+                Id = Guid.NewGuid(),
+                Name = "Zapiekanka makaronowa",
+                Category = Category.MainCourse,
+                Ingredients = "makaron,masło,mleko,mąka,brokuły,kurczak,ser,sól,pieprz",
+                Directions = "Makaron i brokuły ugotuj al dente. Kurczaka pokrój, przypraw solą i pieprzem i smaż przez chwilę. z masła, mleka i mąki zrób sos beszamelowy. Wymieszaj wszystko w żaroodpornym naczyniu, posyp startym serem. Piecz około 30 minut w 180 stopniach."
+                }
+            };
+
+            var addedRecipes = new List<RecipeDto>();
+            foreach(var recipe in newRecipes)
+            {
+                addedRecipes.Add(AddRecipe(_mapper.Map<RecipeDto>(recipe)));
+            }
+
+            return addedRecipes;   
+        }
+
         public RecipeDto AddRecipe(RecipeDto recipeDto)
         {
+            if (recipeDto == null) return null;
+            recipeDto.Id = Guid.NewGuid();
             var recipe = _mapper.Map<Recipe>(recipeDto);
             var addedRecipe = _recipesRepository.AddRecipe(recipe);
             return _mapper.Map<RecipeDto>(addedRecipe);
         }
 
-        public bool AddToFavorites(UserDto userDto,  RecipeDto recipeDto)
+        public bool AddToFavorites(UserDto userDto, RecipeDto recipeDto)
         {
             var user = _mapper.Map<User>(userDto);
             var recipe = _mapper.Map<Recipe>(recipeDto);
@@ -59,7 +109,7 @@ namespace MyFood.BL.Services
                         }
                     }
                 }
-                if(counter > 0)
+                if (counter > 0)
                 {
                     foundRecipes.Add(recipe, counter);
                     counter = 0;

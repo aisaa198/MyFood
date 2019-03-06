@@ -20,7 +20,6 @@ namespace MyFood.WebApi.Controllers
         [Route("api/recipes/add")]
         public RecipeDto AddRecipe(RecipeDto recipe)
         {
-            recipe.Id = Guid.NewGuid();
             return _recipesService.AddRecipe(recipe);
         }
 
@@ -30,12 +29,23 @@ namespace MyFood.WebApi.Controllers
             return _recipesService.GetRecipes((Category)id);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/recipes/search")]
-        public List<RecipeDto> SearchRecipes(string ingredient)
+        public List<RecipeDto> SearchRecipes(RecipeDto recipe)
         {
-            var ingredients = new string[] { ingredient };
+            var ingredients = new string[recipe.ListOfIngredients.Length];
+            for (int i = 0; i < recipe.ListOfIngredients.Length; i++){
+                ingredients[i] = recipe.ListOfIngredients[i];
+            }
+            
             return _recipesService.SearchRecipes(ingredients);
+        }
+
+        [HttpGet]
+        [Route("api/recipes/addex")]
+        public List<RecipeDto> AddExemplaryRecipes()
+        {
+            return _recipesService.AddExemplaryRecipes();
         }
 
     }

@@ -36,7 +36,14 @@ namespace MyFood
             _menu.AddOption(new Option("2", "Show all recipes", ShowAllReceipes));
             _menu.AddOption(new Option("3", "Show recipes from one category", ShowRecipesInCategory));
             _menu.AddOption(new Option("4", "Search recipes by ingredients", SearchRecipes));
-            _menu.AddOption(new Option("5", "Log out", LogOut));
+            _menu.AddOption(new Option("5", "Add exemplary recipes", AddExemplaryRecipes));
+            _menu.AddOption(new Option("6", "Log out", LogOut));
+        }
+
+        private void AddExemplaryRecipes()
+        {
+            var result = _recipesService.AddExemplaryRecipes();
+            ShowResult(result);
         }
 
         internal void Run()
@@ -253,12 +260,10 @@ namespace MyFood
 
             var newRecipe = new RecipeDto
             {
-                Id = Guid.NewGuid(),
                 Name = name,
                 Category = category,
                 ListOfIngredients = listOfIngredients,
-                Directions = directions,
-                Users = new List<UserDto>()
+                Directions = directions
             };
 
             var result = _recipesService.AddRecipe(newRecipe);
